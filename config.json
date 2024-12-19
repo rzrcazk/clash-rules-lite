@@ -1,0 +1,369 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "ui",
+      "external_ui_download_url": "",
+      "external_ui_download_detour": "",
+      "secret": "",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "store_fakeip": true
+    }
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "proxydns",
+        "address": "tls://8.8.8.8/dns-query",
+        "detour": "select"
+      },
+      {
+        "tag": "localdns",
+        "address": "h3://223.5.5.5/dns-query",
+        "detour": "direct"
+      },
+      {
+        "tag": "dns_fakeip",
+        "address": "fakeip"
+      }
+    ],
+    "rules": [
+      {
+        "outbound": "any",
+        "server": "localdns",
+        "disable_cache": true
+      },
+      {
+        "clash_mode": "Global",
+        "server": "proxydns"
+      },
+      {
+        "clash_mode": "Direct",
+        "server": "localdns"
+      },
+      {
+        "rule_set": "geosite-cn",
+        "server": "localdns"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "server": "proxydns"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "dns_fakeip"
+      }
+    ],
+    "fakeip": {
+      "enabled": true,
+      "inet4_range": "198.18.0.0/15",
+      "inet6_range": "fc00::/18"
+    },
+    "independent_cache": true,
+    "final": "proxydns"
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "address": [
+        "172.19.0.1/30",
+        "fd00::1/126"
+      ],
+      "auto_route": true,
+      "strict_route": true,
+      "sniff": true,
+      "sniff_override_destination": true,
+      "domain_strategy": "prefer_ipv4"
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "select",
+      "type": "selector",
+      "default": "auto",
+      "outbounds": [
+        "auto",
+        "CF_V8_usa.visa.com_443",
+        "CF_V9_myanmar.visa.com_8443",
+        "CF_V10_www.visa.com.tw_2053",
+        "CF_V11_www.visaeurope.ch_2083",
+        "CF_V12_www.visa.com.br_2087",
+        "CF_V13_www.visasoutheasteurope.com_2096"
+      ]
+    },
+    {
+      "server": "usa.visa.com",
+      "server_port": 443,
+      "tag": "CF_V8_usa.visa.com_443",
+      "tls": {
+        "enabled": true,
+        "server_name": "1219.952712.xyz",
+        "insecure": false,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "packet_encoding": "packetaddr",
+      "transport": {
+        "headers": {
+          "Host": [
+            "1219.952712.xyz"
+          ]
+        },
+        "path": "/?ed=2560",
+        "type": "ws"
+      },
+      "type": "vless",
+      "uuid": "ca52da78-2de8-4fdb-ad90-a6dbe4e3728b"
+    },
+    {
+      "server": "myanmar.visa.com",
+      "server_port": 8443,
+      "tag": "CF_V9_myanmar.visa.com_8443",
+      "tls": {
+        "enabled": true,
+        "server_name": "1219.952712.xyz",
+        "insecure": false,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "packet_encoding": "packetaddr",
+      "transport": {
+        "headers": {
+          "Host": [
+            "1219.952712.xyz"
+          ]
+        },
+        "path": "/?ed=2560",
+        "type": "ws"
+      },
+      "type": "vless",
+      "uuid": "ca52da78-2de8-4fdb-ad90-a6dbe4e3728b"
+    },
+    {
+      "server": "www.visa.com.tw",
+      "server_port": 2053,
+      "tag": "CF_V10_www.visa.com.tw_2053",
+      "tls": {
+        "enabled": true,
+        "server_name": "1219.952712.xyz",
+        "insecure": false,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "packet_encoding": "packetaddr",
+      "transport": {
+        "headers": {
+          "Host": [
+            "1219.952712.xyz"
+          ]
+        },
+        "path": "/?ed=2560",
+        "type": "ws"
+      },
+      "type": "vless",
+      "uuid": "ca52da78-2de8-4fdb-ad90-a6dbe4e3728b"
+    },
+    {
+      "server": "www.visaeurope.ch",
+      "server_port": 2083,
+      "tag": "CF_V11_www.visaeurope.ch_2083",
+      "tls": {
+        "enabled": true,
+        "server_name": "1219.952712.xyz",
+        "insecure": false,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "packet_encoding": "packetaddr",
+      "transport": {
+        "headers": {
+          "Host": [
+            "1219.952712.xyz"
+          ]
+        },
+        "path": "/?ed=2560",
+        "type": "ws"
+      },
+      "type": "vless",
+      "uuid": "ca52da78-2de8-4fdb-ad90-a6dbe4e3728b"
+    },
+    {
+      "server": "www.visa.com.br",
+      "server_port": 2087,
+      "tag": "CF_V12_www.visa.com.br_2087",
+      "tls": {
+        "enabled": true,
+        "server_name": "1219.952712.xyz",
+        "insecure": false,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "packet_encoding": "packetaddr",
+      "transport": {
+        "headers": {
+          "Host": [
+            "1219.952712.xyz"
+          ]
+        },
+        "path": "/?ed=2560",
+        "type": "ws"
+      },
+      "type": "vless",
+      "uuid": "ca52da78-2de8-4fdb-ad90-a6dbe4e3728b"
+    },
+    {
+      "server": "www.visasoutheasteurope.com",
+      "server_port": 2096,
+      "tag": "CF_V13_www.visasoutheasteurope.com_2096",
+      "tls": {
+        "enabled": true,
+        "server_name": "1219.952712.xyz",
+        "insecure": false,
+        "utls": {
+          "enabled": true,
+          "fingerprint": "chrome"
+        }
+      },
+      "packet_encoding": "packetaddr",
+      "transport": {
+        "headers": {
+          "Host": [
+            "1219.952712.xyz"
+          ]
+        },
+        "path": "/?ed=2560",
+        "type": "ws"
+      },
+      "type": "vless",
+      "uuid": "ca52da78-2de8-4fdb-ad90-a6dbe4e3728b"
+    },
+    {
+      "tag": "direct",
+      "type": "direct"
+    },
+    {
+      "tag": "dns-out",
+      "type": "dns"
+    },
+    {
+      "tag": "block",
+      "type": "block"
+    },
+    {
+      "tag": "auto",
+      "type": "urltest",
+      "outbounds": [
+        "CF_V8_usa.visa.com_443",
+        "CF_V9_myanmar.visa.com_8443",
+        "CF_V10_www.visa.com.tw_2053",
+        "CF_V11_www.visaeurope.ch_2083",
+        "CF_V12_www.visa.com.br_2087",
+        "CF_V13_www.visasoutheasteurope.com_2096"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "1m",
+      "tolerance": 50,
+      "interrupt_exist_connections": false
+    }
+  ],
+  "route": {
+    "rule_set": [
+      {
+        "tag": "geosite-geolocation-!cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
+        "download_detour": "select",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-cn.srs",
+        "download_detour": "select",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+        "download_detour": "select",
+        "update_interval": "1d"
+      }
+    ],
+    "auto_detect_interface": true,
+    "final": "select",
+    "rules": [
+      {
+        "inbound": "tun-in",
+        "outbound": "dns-out"
+      },
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
+      {
+        "port": 443,
+        "network": "udp",
+        "outbound": "block"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "select"
+      },
+      {
+        "rule_set": "geoip-cn",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "geosite-cn",
+        "outbound": "direct"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "outbound": "select"
+      }
+    ]
+  },
+  "ntp": {
+    "enabled": true,
+    "server": "time.apple.com",
+    "server_port": 123,
+    "interval": "30m",
+    "detour": "direct"
+  }
+}
